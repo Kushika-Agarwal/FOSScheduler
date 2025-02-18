@@ -1,36 +1,59 @@
 "use client";
-import { app } from "@/config/FirebaseConfig";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import React, { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { app } from "@/config/FirebaseConfig";
 
 function Dashboard() {
+  const auth = getAuth(app);
   const db = getFirestore(app);
-  const { user } = useKindeBrowserClient();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [business, setBusiness] = useState(null);
   useEffect(() => {
-    user && isBusinessRegistered();
-  }, [user]);
-  const isBusinessRegistered = async () => {
-    const docRef = doc(db, "Business", user.email);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        await isBusinessRegistered(currentUser);
+      } else {
+        // Delay redirect to avoid unnecessary flickers
+        setTimeout(() => {
+          router.replace("/login");
+        }, 500);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const isBusinessRegistered = async (currentUser) => {
+    if (!currentUser) return;
+
+    const docRef = doc(db, "Business", currentUser.email);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
-      setLoading(false);
+      setBusiness(docSnap.data());
     } else {
-      // docSnap.data() will be undefined in this case
       console.log("No such document!");
-      setLoading(false);
       router.replace("/create-business");
     }
+    setLoading(false);
   };
+
   if (loading) {
     return <div>Loading....</div>;
   }
+
+  return (
+    <>
+      <div>Welcome to your Dashboard, {user?.email}</div>
+      <div>Your Buisness {business?.businessName}</div>
+    </>
+  );
 }
 
 export default Dashboard;
