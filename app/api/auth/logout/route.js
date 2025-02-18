@@ -1,16 +1,20 @@
+"use client";
+
 import { auth } from "@/config/FirebaseConfig.js";
 import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
-export async function POST() {
-  try {
-    await signOut(auth);
-    return new Response(
-      JSON.stringify({ message: "User logged out successfully" }),
-      { status: 200 }
-    );
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 400,
-    });
-  }
+export default function LogoutButton() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Firebase Auth works in the client
+      router.push("/login"); // Redirect to login page after logout
+    } catch (error) {
+      console.error("Logout Error:", error.message);
+    }
+  };
+
+  return <button onClick={handleLogout}>Logout</button>;
 }

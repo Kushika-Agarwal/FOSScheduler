@@ -4,61 +4,70 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import {
   deleteDoc,
   doc,
   getDoc,
   getFirestore,
   orderBy,
+  collection,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "@/config/FirebaseConfig";
-import { Clock, Copy, MapPin, Pen, Settings, Trash } from "lucide-react";
+import { Clock, Copy, MapPin, Settings, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 function MeetingEventList() {
   const [eventList, setEventList] = useState([]);
+  const [user, setUser] = useState(null);
+  const [businessInfo, setBusinessInfo] = useState(null);
   const db = getFirestore(app);
-  const { user } = useKindeBrowserClient();
-  const [businessInfo, setBusinessInfo] = useState();
+  const auth = getAuth(app);
 
   useEffect(() => {
-    user && getEventList();
-    user && BusinessInfo();
-  }, [user]);
-  const getEventList = async () => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        getEventList(currentUser.email);
+        fetchBusinessInfo(currentUser.email);
+      } else {
+        setUser(null);
+        setEventList([]);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const getEventList = async (email) => {
     setEventList([]);
     const q = query(
       collection(db, "MeetingEvent"),
-      where("createdBy", "==", user?.email),
+      where("createdBy", "==", email),
       orderBy("id", "desc")
     );
-
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-      setEventList((prevEvent) => [...prevEvent, doc.data()]);
-    }, orderBy("id", "desc"));
+    const events = querySnapshot.docs.map((doc) => doc.data());
+    setEventList(events);
   };
 
-  const BusinessInfo = async () => {
-    const docRef = doc(db, "Business", user.email);
+  const fetchBusinessInfo = async (email) => {
+    const docRef = doc(db, "Business", email);
     const docSnap = await getDoc(docRef);
-    setBusinessInfo(docSnap.data());
+    if (docSnap.exists()) {
+      setBusinessInfo(docSnap.data());
+    }
   };
 
   const onDeleteMeetingEvent = async (event) => {
-    await deleteDoc(doc(db, "MeetingEvent", event?.id)).then((resp) => {
-      toast.success("Meeting Deleted");
-      getEventList();
-    });
+    await deleteDoc(doc(db, "MeetingEvent", event?.id));
+    toast.success("Meeting Deleted");
+    getEventList(user.email);
   };
 
   const onCopyClickHandler = (event) => {
@@ -69,7 +78,7 @@ function MeetingEventList() {
       "/" +
       event.id;
     navigator.clipboard.writeText(meetingEventUrl);
-    toast.success("Url copied ");
+    toast.success("URL copied");
   };
 
   return (
@@ -91,8 +100,7 @@ function MeetingEventList() {
                     className="flex gap-2"
                     onClick={() => onDeleteMeetingEvent(event)}
                   >
-                    <Trash />
-                    Delete
+                    <Trash /> Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -100,12 +108,10 @@ function MeetingEventList() {
             <h2 className="font-medium text-2xl">{event?.eventName}</h2>
             <div className="flex justify-between">
               <h2 className="flex gap-2 text-gray-500">
-                <Clock />
-                {event.duration} Min
+                <Clock /> {event.duration} Min
               </h2>
               <h2 className="flex gap-2 text-gray-500">
-                <MapPin />
-                {event.location}
+                <MapPin /> {event.location}
               </h2>
             </div>
             <hr />
@@ -116,8 +122,7 @@ function MeetingEventList() {
                   onCopyClickHandler(event);
                 }}
               >
-                <Copy className="h-4 w-4 " />
-                Copy Link
+                <Copy className="h-4 w-4 " /> Copy Link
               </h2>
               <Button
                 className="rounded-full text-primary border-primary"

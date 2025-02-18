@@ -2,7 +2,8 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
+import Link from "next/link";
+
 function Header() {
   return (
     <div>
@@ -29,12 +30,12 @@ function Header() {
           </li>
         </ul>
         <div>
-          <LoginLink>
+          <Link href={"/login"}>
             <Button variant="ghost">Login</Button>
-          </LoginLink>
-          <RegisterLink>
+          </Link>
+          <Link href={"/signup"}>
             <Button>Get Started</Button>
-          </RegisterLink>
+          </Link>
         </div>
       </div>
     </div>

@@ -2,6 +2,10 @@
 import React from "react";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { auth } from "@/config/FirebaseConfig"; // Ensure correct path
+import { signOut } from "firebase/auth";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +14,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 
 function DashBoardHeader() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut(auth);
+
+    router.push("/login");
+  };
+
   return (
     <div className="p-4 mx-10">
       <div>
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex item-center float-right">
+          <DropdownMenuTrigger className="flex items-center float-right">
             <Image
               src="/man.jpeg"
               alt="profile pic"
@@ -32,8 +43,8 @@ function DashBoardHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>
-              <LogoutLink>Logout</LogoutLink>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

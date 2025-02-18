@@ -15,7 +15,7 @@ import Link from "next/link";
 import ThemeOption from "@/app/_utils/ThemeOption";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { app } from "@/config/FirebaseConfig";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -25,10 +25,19 @@ function MeetingForm({ setFormValue }) {
   const [eventName, setEventName] = useState();
   const [duration, setDuration] = useState(30);
   const [locationUrl, setLocationUrl] = useState();
+  const [user, setUser] = useState(null);
 
-  const { user } = useKindeBrowserClient();
   const db = getFirestore(app);
+  const auth = getAuth(app);
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   useEffect(() => {
     setFormValue({
       eventName: eventName,
@@ -40,6 +49,10 @@ function MeetingForm({ setFormValue }) {
   }, [eventName, location, duration, locationUrl, themeColor]);
 
   const onCreateClick = async () => {
+    if (!user) {
+      toast.error("User not authenticated");
+      return;
+    }
     const id = Date.now().toString();
     await setDoc(doc(db, "MeetingEvent", id), {
       id: id,
@@ -48,13 +61,14 @@ function MeetingForm({ setFormValue }) {
       location: location,
       locationUrl: locationUrl,
       themeColor: themeColor,
-      businessId: doc(db, "Business", user?.email),
-      createdBy: user?.email,
-    }).then((rsp) => {
+      businessId: doc(db, "Business", user.email),
+      createdBy: user.email,
+    }).then(() => {
       toast.success("New Meeting event created");
       router.replace("/dashboard/meeting-type");
     });
   };
+
   return (
     <div className="p-8 ">
       <Link href="/dashboard">
@@ -73,7 +87,6 @@ function MeetingForm({ setFormValue }) {
           onChange={(e) => setEventName(e.target.value)}
         ></Input>
         <h2>Duration *</h2>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="max-w-40">
@@ -81,18 +94,11 @@ function MeetingForm({ setFormValue }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setDuration(15)}>
-              15 Min
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setDuration(30)}>
-              30 Min
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setDuration(45)}>
-              45 Min
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setDuration(60)}>
-              60 Min
-            </DropdownMenuItem>
+            {[15, 30, 45, 60].map((time) => (
+              <DropdownMenuItem key={time} onClick={() => setDuration(time)}>
+                {time} Min
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -102,7 +108,7 @@ function MeetingForm({ setFormValue }) {
             <div
               key={index}
               className={`border flex flex-col justify-center items-center p-3 rounded-lg hover:bg-blue-100 hover:border-primary cursor-pointer${
-                location == option.name && "bg-blue-100 border-primary"
+                location === option.name && " bg-blue-100 border-primary"
               }`}
               onClick={() => setLocation(option.name)}
             >
@@ -133,7 +139,7 @@ function MeetingForm({ setFormValue }) {
             <div
               key={index}
               className={`h-5 w-5 rounded-full ${
-                themeColor == color && " border-black border-4"
+                themeColor === color && " border-black border-4"
               }`}
               style={{ backgroundColor: color }}
               onClick={() => setThemeColor(color)}
