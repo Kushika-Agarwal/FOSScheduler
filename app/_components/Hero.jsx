@@ -42,21 +42,18 @@ function Hero() {
           voluptatibus harum ducimus. Dolor, praesentium!
         </h2>
         <div className=" gap-5 mt-5 flex flex-col">
-          <h3>Sign up free with Google and Facebook</h3>
+          <h3>Sign up using Email and Password</h3>
           <div className="flex justify-center gap-8 ">
-            <Button className="p-3 flex justify-center gap-4">
-              <Image src="/search.png" alt="google" width={30} height={30} />
-              Sign Up with Google
-            </Button>
-            <Button className="p-3 flex justify-center gap-4">
-              <Image
-                src="/facebook.png"
-                alt="facebook"
-                width={30}
-                height={30}
-              />
-              Sign Up with Facebook
-            </Button>
+            <Link href={"/signup"}>
+              <Button className="p-3 flex justify-center gap-4">
+                Sign Up with Email
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button className="p-3 flex justify-center gap-4">
+                Sign in with Email
+              </Button>
+            </Link>
           </div>
           <hr />
           <h2>
