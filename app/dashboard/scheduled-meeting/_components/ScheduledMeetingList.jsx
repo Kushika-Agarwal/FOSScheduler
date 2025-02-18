@@ -26,11 +26,11 @@ function ScheduledMeetingList({ meetingList }) {
 
                   <h2 className="flex gap-2">
                     <CalendarCheck />
-                    {meeting.formatDate}
+                    {meeting?.formatDate}
                   </h2>
                   <h2 className="flex gap-2">
                     <Timer />
-                    {meeting.selectedTime}
+                    {meeting?.selectedTime}
                   </h2>
 
                   <Link
@@ -40,7 +40,7 @@ function ScheduledMeetingList({ meetingList }) {
                     {meeting?.locationUrl}
                   </Link>
                 </div>
-                <Link href={meeting.locationUrl}>
+                <Link href={meeting?.locationUrl}>
                   <Button className="mt-5">Join Now</Button>
                 </Link>
               </AccordionContent>

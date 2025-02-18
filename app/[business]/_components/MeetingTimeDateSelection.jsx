@@ -58,9 +58,14 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     console.log(slots);
     setTimeSlots(slots);
   };
-
   const handleDateChange = (date) => {
+    if (!(date instanceof Date) || isNaN(date)) {
+      console.error("Invalid date object:", date);
+      return;
+    }
+
     setDate(date);
+
     const day = format(date, "EEEE");
     if (businessInfo?.daysAvailable?.[day]) {
       getPrevEventBooking(date);
@@ -94,34 +99,13 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
       toast("Meeting Scheduled Successfully");
     });
   };
-  // const sendEmail = async (user) => {
-  //   const emailHtml = await render(
-  //     <Email
-  //       businessName={businessInfo?.businessName}
-  //       date={format(date, "PPP").toString()}
-  //       duration={eventInfo?.duration}
-  //       meetingTime={selectedTime}
-  //       meetingUrl={eventInfo?.locationUrl}
-  //       userFirstName={user}
-  //     />
-  //   );
-
-  //   plunk.emails
-  //     .send({
-  //       to: userEmail,
-  //       subject: "Meeting Scheduled",
-  //       body: emailHtml,
-  //     })
-  //     .then((resp) => {
-  //       console.log(resp);
-  //       router.replace("/confirmation");
-  //     });
-  // };
-
-  // Used to fetch previous booking
-  // @params {*} date_
 
   const getPrevEventBooking = async (date_) => {
+    if (!eventInfo || !eventInfo.id) {
+      console.error("eventInfo is missing or eventId is undefined");
+      return;
+    }
+
     const q = query(
       collection(db, "ScheduledMeetings"),
       where("selectedDate", "==", date_),
@@ -135,6 +119,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
       setPrevBooking((prev) => [...prev, doc.data()]);
     });
   };
+
   return (
     <div
       className="p-5 py-10 shadow-lg m-5 border-t-8 mx-10 md:mx-26 lg:mx-56"
@@ -160,8 +145,9 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
             </h2>
             <h2 className="flex gap-2">
               <CalendarCheck />
-              {format(date, "PPP")}
+              {date && format(date, "PPP")}
             </h2>
+
             <h2 className="flex gap-2">
               <Timer />
               {selectedTime}

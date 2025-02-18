@@ -5,29 +5,40 @@ import ScheduledMeetingList from "./_components/ScheduledMeetingList";
 import {
   collection,
   getDocs,
-  getDoc,
   getFirestore,
   query,
   where,
 } from "firebase/firestore";
 import { app } from "@/config/FirebaseConfig";
-import { format, getDate } from "date-fns";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { format } from "date-fns";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function ScheduledMeeting() {
   const db = getFirestore(app);
-  const { user } = useKindeBrowserClient();
+  const auth = getAuth();
 
+  const [user, setUser] = useState(null);
   const [meetingList, setMeetingList] = useState([]);
-  useEffect(() => {
-    user && getScheduledMeetings();
-  }, [user]);
 
-  const getScheduledMeetings = async () => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+        getScheduledMeetings(firebaseUser.email); // Fetch meetings when user is logged in
+      } else {
+        setUser(null); // Clear user data when logged out
+      }
+    });
+
+    // Clean up the listener when the component is unmounted
+    return () => unsubscribe();
+  }, []);
+
+  const getScheduledMeetings = async (email) => {
     setMeetingList([]);
     const q = query(
       collection(db, "ScheduledMeetings"),
-      where("businessEmail", "==", user.email)
+      where("businessEmail", "==", email)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -47,6 +58,7 @@ function ScheduledMeeting() {
       );
     }
   };
+
   return (
     <div className="p-10">
       <h2 className="font-bold text-2xl">Scheduled Meetings</h2>
