@@ -7,13 +7,13 @@ import Link from "next/link";
 function Header() {
   return (
     <div>
-      <div className="flex items-center justify-between p-5 shadow-md">
+      <div className="flex items-center justify-between  shadow-md">
         <Image
-          src="/logo.svg"
-          width={100}
-          height={100}
+          src="/logo.png"
+          width={200}
+          height={200}
           alt="logo"
-          className="w-[60px] md:w-[80px] ml-8"
+          className="w-[100px] md:w-[150px] ml-8"
         />
         <ul className="hidden md:flex gap-14 font-medium text-lg">
           <li className="hover:text-primary hover:bg-slate-50 transition-all duration-300 cursor-pointer">

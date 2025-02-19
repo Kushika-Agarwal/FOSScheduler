@@ -39,8 +39,8 @@ function SideNavbar() {
   }, [path]);
   return (
     <div className="p-5 py-14">
-      <div className="flex justify-center">
-        <Image src="/logo.svg" width={80} height={80} alt="logo" />
+      <div className="flex justify-center ">
+        <Image src="/logo.png" width={120} height={120} alt="logo" />
       </div>
       <div>
         <Link href="/create-meeting">
