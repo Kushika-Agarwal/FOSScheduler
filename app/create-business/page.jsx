@@ -53,7 +53,7 @@ function CreateBusiness() {
 
   return (
     <div className="flex flex-col items-center p-14 gap-20">
-      <Image src="/logo.svg" width={100} height={100} alt="Logo" />
+      <Image src="/logo.png" width={100} height={100} alt="Logo" />
       <div className="flex flex-col items-center gap-4 max-w-3xl">
         <h2 className="text-4xl font-bold">
           What should we call your Business?
