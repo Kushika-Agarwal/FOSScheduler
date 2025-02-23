@@ -35,11 +35,13 @@ function Hero() {
         <h2 className="font-bold text-[50px] text-slate-700">
           Easy Scheduling ahead
         </h2>
-        <h2 className="text-lg mt-5 text-slate-500">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio
-          mollitia dicta blanditiis culpa aliquid officia, sed deleniti ratione
-          odit soluta voluptate neque voluptates, perspiciatis provident
-          voluptatibus harum ducimus. Dolor, praesentium!
+        <h2 className="text-lg mt-5 text-slate-700 font-semibold">
+          FOSScheduler is an open-source appointment scheduling platform
+          designed for local businesses. It offers a simple, user-friendly
+          interface, allowing businesses to manage bookings effortlessly without
+          the high costs of SaaS solutions. With real-time availability tracking
+          and customizable scheduling, it ensures smooth and efficient
+          appointment management for both business owners and clients.
         </h2>
         <div className=" gap-5 mt-5 flex flex-col">
           <h3>Sign up using Email and Password</h3>
