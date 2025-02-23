@@ -1,6 +1,6 @@
 ## **FOSScheduler - Empowering Local Businesses with Open-Source Scheduling**
 
-![alt text](https://github.com/Kushika-Agarwal/FOSScheduler/blob/main/public/logo.png?raw=true)
+(![alt text](image-2.png))
 
 In a world where time is money, small businesses often struggle with managing appointments efficiently. Long wait times, double bookings, and outdated manual scheduling methods lead to frustrated customers and lost revenue. Large enterprises have access to expensive SaaS solutions, but what about the **local salon, the neighborhood doctor, or the independent mechanic** who just wants a simple, hassle-free way to manage their bookings?
 
@@ -10,11 +10,29 @@ Deployed on: **https://foss-scheduler-git-main-kushikas-projects.vercel.app/**
 
 **This is where FOSScheduler steps in.**
 
+Landing page :
+![alt text](image-1.png)
+
 ### **Why FOSScheduler?**
 
 FOSScheduler is more than just a scheduling app—it’s a movement dedicated to empowering businesses with free and open-source technology. By removing the dependency on costly, proprietary systems, we enable local businesses to take full control of their operations. Designed as a seamless, real-time scheduling solution, FOSScheduler is lightweight, **user-friendly**, and built for everyone—even those with **no technical expertise**.
 
 Imagine a world where a salon owner can manage all their bookings with a **single click**, where a doctor’s clinic can schedule patients without worrying about overbooking, and where a mechanic can streamline his daily appointments without unnecessary back-and-forth calls. **FOSScheduler makes this a reality.**
+
+Meeting List Page:
+![alt text](image-7.png)
+
+Create Meeting:
+![alt text](image-6.png)
+
+Mention Availability:
+![alt text](image-4.png)
+
+Mention Upcoming and Expired Meeting
+![alt text](image-5.png)
+
+Appointment Booking for Clients:
+![alt text](image-8.png)
 
 ### **✨ Key Features:**
 
@@ -24,7 +42,6 @@ Imagine a world where a salon owner can manage all their bookings with a **singl
 ✅ **Set Your Availability** – Business owners can block out unavailable dates and times to avoid unwanted bookings.  
 ✅ **Upcoming & Expired Appointments** – View and manage scheduled, completed, or missed bookings in one place.  
 ✅ **Self-Hosted & Open-Source** – Unlike expensive SaaS services, FOSScheduler is cost-efficient and can be hosted for **free** with complete ownership.
-![alt text](image-1.png)
 
 ### **🛠 Tech Stack:**
 
