@@ -27,10 +27,7 @@ function TimeDateSelection({
           disabled={(date) => date < new Date()}
         />
       </div>
-      <div
-        className="flex flex-col w-full overflow-auto gap-4 p-5 max-h-96 "
-        // style={{ maxHeight: "400px" }}
-      >
+      <div className="flex flex-col w-full overflow-auto gap-4 p-5 max-h-96 ">
         {timeSlots?.map((time, index) => (
           <Button
             key={index}

@@ -74,7 +74,7 @@ function SharedMeetingEvent({ params }) {
     const { data: businessData, error: businessError } = await supabase
       .from("Business")
       .select("*")
-      .eq("businessName", params.business)
+      .eq("business_name", params.business)
       .single();
 
     if (businessError) {

@@ -292,7 +292,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
         formatDate: format(date, "PPP"),
         formattedTimeStamp: format(date, "t"),
         duration: eventInfo.duration,
-        location_url: eventInfo.location_url,
+        locationUrl: eventInfo.location_url,
         eventId: eventInfo.id,
         userName: userName,
         userEmail: userEmail,
