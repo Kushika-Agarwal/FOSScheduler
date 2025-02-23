@@ -1,5 +1,6 @@
 ## **FOSScheduler - Empowering Local Businesses with Open-Source Scheduling**
 
+logo:![alt text](https://github.com/Kushika-Agarwal/FOSScheduler/blob/main/public/logo.png?raw=true)
 In a world where time is money, small businesses often struggle with managing appointments efficiently. Long wait times, double bookings, and outdated manual scheduling methods lead to frustrated customers and lost revenue. Large enterprises have access to expensive SaaS solutions, but what about the **local salon, the neighborhood doctor, or the independent mechanic** who just wants a simple, hassle-free way to manage their bookings?
 
 For Detailed ppt : **https://docs.google.com/presentation/d/1tIwEVdvXVCc-93Bsz1hpOpDtpNk9r-ZhRqLMX_gU3bo/edit?usp=sharing**
