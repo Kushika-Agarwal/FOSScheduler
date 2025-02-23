@@ -24,6 +24,7 @@ Imagine a world where a salon owner can manage all their bookings with a **singl
 ✅ **Set Your Availability** – Business owners can block out unavailable dates and times to avoid unwanted bookings.  
 ✅ **Upcoming & Expired Appointments** – View and manage scheduled, completed, or missed bookings in one place.  
 ✅ **Self-Hosted & Open-Source** – Unlike expensive SaaS services, FOSScheduler is cost-efficient and can be hosted for **free** with complete ownership.
+![alt text](image-1.png)
 
 ### **🛠 Tech Stack:**
 
